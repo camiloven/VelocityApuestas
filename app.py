@@ -1,23 +1,23 @@
 import json
-import os
+import urllib.request
+import datetime
 
-# Supongamos que aquí obtienes tus 'picks' (lista de diccionarios)
-# picks = [...] 
+# Tu API Key real va aquí
+API_KEY = '41c3641633091197d7e47be1c2e1d7e4' 
+# URL para el día de hoy
+fecha = datetime.datetime.now().strftime('%Y-%m-%d')
+URL = f"https://v3.football.api-sports.io/fixtures?date={fecha}"
 
-# Guardar en picks.json (Día actual)
-with open('picks.json', 'w') as f:
-    json.dump(picks, f)
+req = urllib.request.Request(URL)
+req.add_header('x-apisports-key', API_KEY)
 
-# Guardar en historial.json (Acumulado)
-historial = []
-if os.path.exists('historial.json'):
-    with open('historial.json', 'r') as f:
-        try:
-            historial = json.load(f)
-        except:
-            historial = []
-
-# Añadimos los nuevos picks y mantenemos los últimos 50
-historial = picks + historial
-with open('historial.json', 'w') as f:
-    json.dump(historial[:50], f)
+try:
+    with urllib.request.urlopen(req) as response:
+        data = json.loads(response.read().decode())
+        picks = data.get('response', [])
+        
+        # Guardar en picks.json
+        with open('picks.json', 'w') as f:
+            json.dump(picks, f)
+except Exception as e:
+    print(f"Error al conectar: {e}")
