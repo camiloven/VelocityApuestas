@@ -21,6 +21,6 @@ for url in fuentes:
     except Exception as e:
         print(f"Error: {e}")
 
-# CAMBIO AQUÍ: Guardamos en 'selecciones.json' para que la web lo encuentre
-with open('selecciones.json', 'w') as f:
+# Esto escribirá en picks.json, que es el que GitHub muestra que está usando tu web
+with open('picks.json', 'w') as f:
     json.dump(todos_los_datos, f)
