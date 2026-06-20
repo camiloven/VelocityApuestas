@@ -1,22 +1,24 @@
-import urllib.request
 import json
-import sys
+import datetime
 
-def actualizar_picks(fecha):
-    url = f"https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d={fecha}"
-    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    try:
-        with urllib.request.urlopen(req) as response:
-            data = json.load(response)
-            if not data.get('events'):
-                print("[]") # Retorna JSON vacío si no hay partidos
-                return
-            
-            picks = [{"equipo": f"{e['strHomeTeam']} vs {e['strAwayTeam']}", "fecha": e['dateEvent']} for e in data['events']]
-            print(json.dumps(picks))
-    except:
-        print("[]")
+# 1. Tu lógica existente para obtener los picks del día
+# (Mantén aquí tu código que obtiene los partidos de la API)
+# Supongamos que ya tienes la lista 'picks' lista
 
-if __name__ == "__main__":
-    fecha = sys.argv[1] if len(sys.argv) > 1 else "2026-06-20"
-    actualizar_picks(fecha)
+# 2. Guardar en picks.json (Lo de siempre)
+with open('picks.json', 'w') as f:
+    json.dump(picks, f)
+
+# 3. Guardar en historial.json (Lo nuevo)
+try:
+    with open('historial.json', 'r') as f:
+        historial = json.load(f)
+except:
+    historial = []
+
+# Añadimos los picks de hoy al historial
+historial.extend(picks)
+
+# Guardamos solo los últimos 50 elementos para que el archivo no crezca demasiado
+with open('historial.json', 'w') as f:
+    json.dump(historial[-50:], f)
