@@ -1,8 +1,11 @@
 name: Actualizar Partidos
 on:
   schedule:
-    - cron: '0 8 * * *' # Se ejecuta todos los días a las 8 AM
-  workflow_dispatch: # Permite ejecutarlo manualmente cuando quieras
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -20,5 +23,5 @@ jobs:
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           git add picks.json
-          git commit -m "Auto-actualización de picks"
+          git commit -m "Auto-actualización de picks" || exit 0
           git push
