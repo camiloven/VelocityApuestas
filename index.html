@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Velocity Apuestas</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #121212; color: white; }
+        .card { background: #1e1e1e; margin: 20px; padding: 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Velocity Apuestas</h1>
+    <div id="lista-picks">Cargando datos...</div>
+    <script>
+        fetch('picks.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('lista-picks');
+                container.innerHTML = data.map(p => 
+                    '<div class="card"><h3>' + p.equipo + '</h3><p>Fecha: ' + p.fecha + '</p></div>'
+                ).join('');
+            });
+    </script>
+</body>
+</html>
