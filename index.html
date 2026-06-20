@@ -2,24 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Velocity Apuestas</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #121212; color: white; }
-        .card { background: #1e1e1e; margin: 20px; padding: 20px; border-radius: 10px; }
+        body { font-family: sans-serif; background: #121212; color: white; text-align: center; margin: 0; padding: 10px; }
+        .card { background: #1e1e1e; border: 1px solid #00f2ff; margin: 15px auto; padding: 20px; border-radius: 12px; max-width: 400px; box-shadow: 0 0 10px rgba(0,242,255,0.2); }
+        .match { font-weight: bold; font-size: 1.2em; margin-bottom: 5px; }
+        .date { color: #888; font-size: 0.9em; }
+        .btn { background: #008c99; color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; margin-top: 10px; display: inline-block; text-decoration: none; }
     </style>
 </head>
 <body>
     <h1>Velocity Apuestas</h1>
-    <div id="lista-picks">Cargando datos...</div>
+    <div id="lista-picks">Cargando...</div>
     <script>
-        fetch('picks.json')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('lista-picks');
-                container.innerHTML = data.map(p => 
-                    '<div class="card"><h3>' + p.equipo + '</h3><p>Fecha: ' + p.fecha + '</p></div>'
-                ).join('');
-            });
+        fetch('picks.json').then(res => res.json()).then(data => {
+            document.getElementById('lista-picks').innerHTML = data.map(p => 
+                '<div class="card"><div class="match">' + p.equipo + '</div><div class="date">Fecha: ' + p.fecha + '</div><br><a href="#" class="btn">Ver más estadísticas</a></div>'
+            ).join('');
+        });
     </script>
 </body>
 </html>
