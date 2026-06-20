@@ -5,34 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Velocity Apuestas</title>
     <style>
-        body { background: #0a0a0a; color: #fff; font-family: 'Segoe UI', sans-serif; padding: 20px; }
-        .search-box { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: white; }
-        .card { background: #161616; border-left: 4px solid #00f2ff; padding: 15px; margin-bottom: 10px; border-radius: 4px; }
-        h1 { color: #00f2ff; text-transform: uppercase; letter-spacing: 2px; }
+        body { background: #0a0a0a; color: #fff; font-family: sans-serif; padding: 20px; text-align: center; }
+        .tab-btn { background: #333; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin: 5px; }
+        .card { background: #161616; border-left: 4px solid #00f2ff; padding: 15px; margin: 10px auto; border-radius: 4px; max-width: 400px; text-align: left; }
     </style>
 </head>
 <body>
     <h1>Velocity Apuestas</h1>
-    <input type="text" id="searchInput" class="search-box" placeholder="Buscar equipo..." onkeyup="filtrar()">
+    <button class="tab-btn" onclick="show('results')">Hoy</button>
+    <button class="tab-btn" onclick="show('history')">Historial</button>
     <div id="results"></div>
-
+    <div id="history" style="display:none;"></div>
     <script>
-        let allPicks = [];
-        fetch('picks.json').then(res => res.json()).then(data => {
-            allPicks = data;
-            render(data);
-        });
-
-        function render(data) {
-            document.getElementById('results').innerHTML = data.map(p => 
-                '<div class="card"><h3>' + p.equipo + '</h3><p>🔮 ' + p.pronostico + '</p></div>'
-            ).join('');
+        function loadData(file, id) {
+            fetch(file).then(res => res.json()).then(data => {
+                document.getElementById(id).innerHTML = data.map(p => 
+                    '<div class="card"><h3>' + p.equipo + '</h3><p>🔮 ' + p.pronostico + '</p></div>'
+                ).join('');
+            });
         }
-
-        function filtrar() {
-            let term = document.getElementById('searchInput').value.toLowerCase();
-            render(allPicks.filter(p => p.equipo.toLowerCase().includes(term)));
+        function show(id) {
+            document.getElementById('results').style.display = id === 'results' ? 'block' : 'none';
+            document.getElementById('history').style.display = id === 'history' ? 'block' : 'none';
         }
+        loadData('picks.json', 'results');
+        loadData('historial.json', 'history');
     </script>
 </body>
 </html>
