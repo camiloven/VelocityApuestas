@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head><style>body { background: #121212; color: white; text-align: center; font-family: sans-serif; }</style></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Velocity Apuestas</title>
+    <style>
+        body { background: #121212; color: white; text-align: center; font-family: sans-serif; }
+        .card { background: #1e1e1e; border: 1px solid #00f2ff; margin: 15px auto; padding: 20px; border-radius: 12px; max-width: 400px; }
+    </style>
+</head>
 <body>
     <h1>Velocity Apuestas</h1>
-    <input type="date" id="datePicker" value="2026-06-20">
+    <div id="status">Cargando datos...</div>
     <div id="results"></div>
     <script>
-        const picker = document.getElementById('datePicker');
-        picker.onchange = () => {
-            fetch('/api/partidos?fecha=' + picker.value)
+        fetch('picks.json')
             .then(res => res.json())
             .then(data => {
+                document.getElementById('status').innerText = "";
                 document.getElementById('results').innerHTML = data.map(p => 
-                    '<p>' + p.equipo + '</p>').join('');
-            });
-        };
+                    '<div class="card"><h3>' + p.equipo + '</h3><p>🔮 ' + p.pronostico + '</p></div>'
+                ).join('');
+            })
+            .catch(err => { document.getElementById('status').innerText = "Error cargando archivo picks.json"; });
     </script>
 </body>
 </html>
